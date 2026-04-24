@@ -52,7 +52,9 @@
   <div class="container d-flex align-items-center gap-3">
 
     <!-- LOGO -->
-    <img src="{{ COMPANY_LOGO_URL }}" class="logo" alt="Logo">
+    {% if COMPANY_LOGO_URL %}
+        <img src="{{ COMPANY_LOGO_URL }}" class="logo" alt="Logo">
+    {% endif %}
 
     <!-- NOMBRE EMPRESA -->
     <span class="fs-4 fw-bold">
