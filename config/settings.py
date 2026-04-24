@@ -121,3 +121,10 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 COMPANY_NAME = os.getenv("COMPANY_NAME", "Mi Empresa")
 COMPANY_LOGO_URL = os.getenv("COMPANY_LOGO_URL", "").strip()
+
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
