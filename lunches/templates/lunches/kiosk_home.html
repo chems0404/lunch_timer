@@ -1,0 +1,33 @@
+{% extends "lunches/base.html" %}
+
+{% block content %}
+
+<div class="text-center mb-4">
+  <h1 class="fw-bold">Control de almuerzo</h1>
+  <p class="text-muted">Selecciona tu nombre</p>
+</div>
+
+<div class="row g-3">
+
+  {% for collaborator in collaborators %}
+    <div class="col-12 col-md-6 col-lg-4">
+
+      <a href="{% url 'collaborator_status' collaborator.id %}"
+         class="btn employee-btn w-100 d-flex align-items-center justify-content-center">
+
+        {{ collaborator.name }}
+
+      </a>
+
+    </div>
+  {% empty %}
+    <div class="col-12">
+      <div class="alert alert-warning text-center">
+        No hay colaboradores activos configurados.
+      </div>
+    </div>
+  {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ COMPANY_NAME }}</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f5f7fa;
+    }
+
+    .logo {
+      max-height: 70px;
+      object-fit: contain;
+    }
+
+    .employee-btn {
+      min-height: 120px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      background-color: #004aad;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      transition: 0.2s;
+    }
+
+    .employee-btn:hover {
+      background-color: #003a8c;
+      transform: scale(1.02);
+    }
+
+    .employee-btn:active {
+      transform: scale(0.98);
+    }
+
+    .kiosk-container {
+      max-width: 1100px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar bg-white border-bottom shadow-sm mb-4">
+  <div class="container d-flex align-items-center gap-3">
+
+    <!-- LOGO -->
+    <img src="{{ COMPANY_LOGO_URL }}" class="logo" alt="Logo">
+
+    <!-- NOMBRE EMPRESA -->
+    <span class="fs-4 fw-bold">
+      {{ COMPANY_NAME }}
+    </span>
+
+    <!-- ADMIN -->
+    <a href="/admin/" class="btn btn-outline-secondary ms-auto">
+      Admin
+    </a>
+
+  </div>
+</nav>
+
+<!-- CONTENIDO -->
+<main class="container kiosk-container">
+
+  <!-- MENSAJES -->
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+
+  {% block content %}{% endblock %}
+
+</main>
+
+<!-- JS Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

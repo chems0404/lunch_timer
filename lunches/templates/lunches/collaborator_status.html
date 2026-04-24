@@ -1,0 +1,45 @@
+{% extends "lunches/base.html" %}
+
+{% block content %}
+<div class="text-center">
+
+<h1 class="mb-4">{{ collaborator.name }}</h1>
+
+{% if not lunch %}
+
+  <p class="lead">Aún no has iniciado tu almuerzo hoy.</p>
+
+  <form method="post" action="{% url 'start_lunch' collaborator.id %}">
+    {% csrf_token %}
+    <button class="btn btn-success btn-lg px-5 py-3">
+      Iniciar almuerzo
+    </button>
+  </form>
+
+{% elif lunch.is_active %}
+
+  <p class="lead">¡Buen provecho!</p>
+  <p class="text-muted">Cuando regreses, presiona el botón para finalizar.</p>
+
+  <form method="post" action="{% url 'end_lunch' collaborator.id %}">
+    {% csrf_token %}
+    <button class="btn btn-danger btn-lg px-5 py-3">
+      Finalizar almuerzo
+    </button>
+  </form>
+
+{% else %}
+
+  <div class="alert alert-success fs-5">
+    Almuerzo registrado correctamente.
+  </div>
+
+  <p class="lead">¡Gracias!</p>
+
+{% endif %}
+
+<br>
+<a href="/" class="btn btn-secondary btn-lg">Volver</a>
+
+</div>
+{% endblock %}

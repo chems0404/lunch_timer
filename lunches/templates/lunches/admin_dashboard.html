@@ -1,0 +1,145 @@
+{% extends "lunches/base.html" %}
+
+{% block content %}
+
+<h1 class="fw-bold mb-4">Dashboard administrativo</h1>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <p class="text-muted mb-1">Registros</p>
+        <h2 class="fw-bold">{{ total_records }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <p class="text-muted mb-1">Almuerzos activos</p>
+        <h2 class="fw-bold">{{ active_lunches }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <p class="text-muted mb-1">Excedidos</p>
+        <h2 class="fw-bold">{{ exceeded_lunches }}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form method="get" class="card card-body shadow-sm border-0 mb-4">
+  <div class="row g-3 align-items-end">
+
+    <div class="col-md-3">
+      <label class="form-label">Fecha</label>
+      <input type="date" name="date" class="form-control" value="{{ selected_date }}">
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Colaborador</label>
+      <select name="collaborator" class="form-select">
+        <option value="">Todos</option>
+
+        {% for collaborator in collaborators %}
+          <option value="{{ collaborator.id }}"
+            {% if selected_collaborator == collaborator.id|stringformat:"s" %}selected{% endif %}>
+            {{ collaborator.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Excedidos</label>
+      <select name="exceeded" class="form-select">
+        <option value="">Todos</option>
+        <option value="1" {% if only_exceeded == "1" %}selected{% endif %}>
+          Solo excedidos
+        </option>
+      </select>
+    </div>
+
+    <div class="col-md-3 d-flex gap-2">
+      <button class="btn btn-primary w-50">
+        Filtrar
+      </button>
+
+      <a class="btn btn-success w-50"
+         href="{% url 'export_lunches_csv' %}?date={{ selected_date }}&collaborator={{ selected_collaborator }}&exceeded={{ only_exceeded }}">
+        CSV
+      </a>
+    </div>
+
+  </div>
+</form>
+
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Colaborador</th>
+            <th>Fecha</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Duración</th>
+            <th>Estado</th>
+            <th>Excedió</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for record in records %}
+            <tr class="{% if record.exceeded_one_hour %}table-danger{% endif %}">
+              <td>{{ record.collaborator.name }}</td>
+              <td>{{ record.date }}</td>
+              <td>{{ record.start_time|date:"H:i:s" }}</td>
+              <td>
+                {% if record.end_time %}
+                  {{ record.end_time|date:"H:i:s" }}
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+              <td>
+                {{ record.duration }}
+              </td>
+              <td>
+                {% if record.is_active %}
+                  <span class="badge text-bg-info">Activo</span>
+                {% else %}
+                  <span class="badge text-bg-secondary">Finalizado</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if record.exceeded_one_hour %}
+                  <span class="badge text-bg-danger">Sí</span>
+                {% else %}
+                  <span class="badge text-bg-success">No</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7" class="text-center text-muted py-4">
+                No hay registros para los filtros seleccionados.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
